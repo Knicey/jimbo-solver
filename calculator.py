@@ -1,4 +1,8 @@
-def determine_highest_hand_ranking(hand):
+from sre_compile import isstring
+
+from cards import PlayingCard, Deck, generateDeck, ranks
+
+def determine_highest_hand_ranking(hand: list[PlayingCard]):
     """
     Calculate what the highest ranked hand available is.
 
@@ -12,8 +16,8 @@ def determine_highest_hand_ranking(hand):
     if not hand:
         return 0
 
-    ranks = [int(card[:2]) for card in hand]
-    suits = [card[2] for card in hand]
+    ranks = [card.rank for card in hand]
+    suits = [card.suit for card in hand]
 
     rank_counts = {rank: ranks.count(rank) for rank in set(ranks)}
     suit_counts = {suit: suits.count(suit) for suit in set(suits)}
@@ -23,9 +27,10 @@ def determine_highest_hand_ranking(hand):
 
     num_pairs = list(rank_counts.values()).count(2)
 
-    isStraight = max(ranks) - min(ranks) == len(ranks) - 1 and len(set(ranks)) == len(ranks)
+    #isStraight = max(ranks) - min(ranks) == len(ranks) - 1 and len(set(ranks)) == len(ranks)
+    #need special handling for detecting straights which are ace high or low
+    isStraight = False #temp
 
-    
     match len(hand):
         case 0:
             ### If no cards are played, no score is given
@@ -123,15 +128,16 @@ def determine_highest_hand_ranking(hand):
 
 if __name__ == "__main__":
     # Example usage
-    hand1 = ["12H", '13D', '12D', '12H']
-    hand2 = ['12H', '12H', '12H', '12H', '12H']
-    hand3 = ['12H', '12H', '12H', '13H', '13H']
-    hand4 = ['12H', '12H', '13H', '13H', '14H']
-    hand5 = ['09H', '10H', '11H', '12H', '13H']
-    hand6 = ['09H', '10H', '11H', '12H', '13C']
-    hand6 = ['09H', '09H', '09C', '12D', '12D']
+    #hand1 = ["12H", '13D', '12D', '12H']
+    hand1 = [PlayingCard("j", "hearts"), PlayingCard("q", "diamonds"), PlayingCard("j", "diamonds"), PlayingCard("j", "hearts")]
+    #hand2 = ['12H', '12H', '12H', '12H', '12H']
+    #hand3 = ['12H', '12H', '12H', '13H', '13H']
+    #hand4 = ['12H', '12H', '13H', '13H', '14H']
+    #hand5 = ['09H', '10H', '11H', '12H', '13H']
+    #hand6 = ['09H', '10H', '11H', '12H', '13C']
+    #hand7 = ['09H', '09H', '09C', '12D', '12D']
 
-    all_hands = [hand1, hand2, hand3, hand4, hand5, hand6]
+    all_hands = [hand1, ]#hand2, hand3, hand4, hand5, hand6, hand7]
 
     for hand in all_hands:
         print(f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(hand)}")
