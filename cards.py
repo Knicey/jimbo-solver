@@ -1,7 +1,6 @@
 from random import randint
 from typing import assert_type
 
-from sympy import rem
 
 numberRanks = ["2", "3", "4", "5", "6", "7", "8", "9", "10"]
 faceRanks = ["j", "q", "k"]
