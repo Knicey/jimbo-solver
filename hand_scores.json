@@ -1,53 +1,53 @@
 {
-    "High Card": {
+    "high_card": {
         "chips": 5,
         "mult": 1
     },
-    "Pair": {
+    "pair": {
         "chips": 10,
         "mult": 2
     },
-    "Two Pair": {
+    "two_pair": {
         "chips": 20,
         "mult": 2
     },
-    "Three of a Kind": {
+    "three_of_a_kind": {
         "chips": 30,
         "mult": 3
     },
-    "Straight": {
+    "straight": {
         "chips": 30,
         "mult": 4
     },
-    "Flush": {
+    "flush": {
         "chips": 35,
         "mult": 4
     },
-    "Full House": {
+    "full_house": {
         "chips": 40,
         "mult": 4
     },
-    "Four of a Kind": {
+    "four_of_a_kind": {
         "chips": 60,
         "mult": 7
     },
-    "Straight Flush": {
+    "straight_flush": {
         "chips": 100,
         "mult": 8
     },
-    "Royal Flush": {
+    "royal_flush": {
         "chips": 100,
         "mult": 8
     },
-    "Five of a Kind": {
+    "five_of_a_kind": {
         "chips": 120,
         "mult": 12
     },
-    "Flush House": {
+    "flush_house": {
         "chips": 140,
         "mult": 14
     },
-    "Flush Five": {
+    "flush_five": {
         "chips": 160,
         "mult": 16
     }
