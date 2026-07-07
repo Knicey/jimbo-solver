@@ -14,7 +14,8 @@ def determine_highest_hand_ranking(hand):
     if not hand:
         return 0
 
-    ranks = [card.rank for card in hand]
+    ranks = [numericRank(card.rank, False) for card in hand]
+    for _ in range(ranks.count(1)): ranks.append(numericRank("a", True))
     suits = [card.suit for card in hand]
 
     rank_counts = {rank: ranks.count(rank) for rank in set(ranks)}
@@ -25,8 +26,8 @@ def determine_highest_hand_ranking(hand):
 
     num_pairs = list(rank_counts.values()).count(2)
 
-    #isStraight = max(ranks) - min(ranks) == len(ranks) - 1 and len(set(ranks)) == len(ranks)
-    #need special handling for detecting straights which are ace high or low
+    isStraight = max(ranks) - min(ranks) == len(ranks) - 1 and len(set(ranks)) == len(ranks)
+    #need to detect ace-low straights (A2345) and ace-high straights (10JQKA)
     isStraight = False #temp
 
     match len(hand):
