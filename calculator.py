@@ -1,5 +1,3 @@
-
-
 def determine_highest_hand_ranking(hand):
     """
     Calculate what the highest ranked hand available is.
