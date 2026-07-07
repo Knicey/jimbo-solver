@@ -1,0 +1,75 @@
+from random import randint
+
+
+ranks = ("a", "2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k")
+suits = ("spades", "clubs", "hearts", "diamonds")
+editions = ("base", "foil", "holographic", "polychrome")
+seals = ("base", "gold", "red", "blue", "purple")
+enhancements = ("base", "bonus", "mult", "wild", "glass", "steel", "stone", "gold", "lucky")
+
+
+class PlayingCard:
+    def __init__(self, rank: str, 
+                 suit: str, 
+                 edition: str = "base", 
+                 seal: str = "base", 
+                 enhancement: str = "base", 
+                 seeded: int = 0,
+                 hikerUpgrade: int = 0) -> None:
+        #probably a more elegant way to do this
+        assert rank in ranks
+        assert suit in suits
+        assert edition in editions
+        assert seal in seals
+        assert enhancement in enhancements
+        assert hikerUpgrade >= 0
+        #consider handling assertion errors
+
+        self.rank = rank
+        self.suit = suit
+        self.edition = edition
+        self.seal = seal
+        self.enhancement = enhancement
+        self.hikerUpgrade = hikerUpgrade
+        self._chips = 0
+        self._mults = 0
+        self.seeded = seeded
+    @property
+    def chips(self) -> int:
+        c = 0
+        if self.enhancement == "stone": c = 50 #could change this to += for consistency
+        else:
+            if self.enhancement == "bonus": c += 30
+            chipsByRank = {"a":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":10, "j":10, "q":10, "k":10}
+            c += chipsByRank[self.rank]
+        c += self.hikerUpgrade
+        if self.edition == "foil": c += 50
+        if self.seal == "red": c *= 2 #won't work if card is modified after scoring, e.g. hiker
+        self._chips = c
+        return self._chips
+    
+    @property
+    def mults(self) -> float:
+        #if seeded is 1..4, lucky mult triggers:
+        # seeded = 1 => first time only
+        # seeded = 2 => second time only
+        # seeded = 3 => both times
+        # seeded = 4 => zero times
+        #behavior only matters for lucky cards
+        #everything else triggers normal RNG
+        seeded = self.seeded
+        m = 0
+        r = 2 if self.seal == "red" else 1
+        for it in range(r):
+            if self.enhancement == "mult": m += 4
+            elif self.enhancement == "lucky":
+                if 1 <= seeded and seeded <= 4:
+                    if (seeded >> it) & 1 == 1:
+                        m += 20
+                else:
+                    seed = randint(1, 5)
+                    if seed == 1: m += 20
+            if self.edition == "holographic": m += 10
+            elif self.edition == "polychrome": m *= 1.5
+        self._mults = m
+        return self._mults
