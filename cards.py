@@ -122,16 +122,24 @@ def fromStr(cardStr: str) -> PlayingCard:
             rank = cardStr[akt]
         else:
             raise Exception(f"Rank equals 0: `{cardStr}`")
-    elif r := "jqka".find(cardStr[akt].lower()) != -1: #cheeky walrus operator
+    elif r := "jqka".find(cardStr[akt]) != -1: #cheeky walrus operator
         akt += 1
         for char in fullRanks[r]:
-            if char == cardStr[akt].lower(): akt += 1 #continue along the substring
+            if char == cardStr[akt]: akt += 1 #continue along the substring
             else: break #stop skipping chars once substring ends
-        rank = str(11 + r) if cardStr[akt].lower() != "a" else "1"
+        rank = str(11 + r) if cardStr[akt] != "a" else "1"
     else: raise Exception(f"Rank invalid: `{cardStr}`")
-
+    #rank parsing done, time for the suit:
     suit = ""
+    if r := "schd".find(cardStr[akt]) != -1:
+        akt += 1
+        for char in suits[r]:
+            if char == cardStr[akt]: akt += 1
+            else: break
+        suit = suits[r]
+    else: raise Exception(f"Suit invalid: `{cardStr}`")
     return PlayingCard(rank, suit)
+
 
 deckTypes = ("base", "abandoned", "checkered", "random") #verify name of last deck type
 
