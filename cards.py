@@ -22,6 +22,11 @@ class PlayingCard:
                  seeded: int = 0,
                  hikerUpgrade: int = 0) -> None:
         #probably a more elegant way to do this
+        if rank.isdigit():
+            if int(rank) == 1:
+                rank = "a"
+            elif int(rank) > 10:
+                rank = (faceRanks + ["a"])[int(rank) - 11]
         assert rank in ranks
         assert suit in suits
         assert edition in editions
@@ -108,9 +113,14 @@ def fromStr(cardStr: str) -> PlayingCard:
         if cardStr[akt] in "0123": 
             #rank is >10 but not ace
             rank = cardStr[:akt + 1]
-        elif cardStr[akt] == "4" or (not cardStr[akt].isdigit()):
-            #first two characters are "14" or second char is not a digit
-            #thus, rank is 1 or 14 (ace)
+            akt += 1
+        elif cardStr[akt] == "4":
+            #rank 14 => ace
+            rank = "1"
+            akt += 1
+        elif not cardStr[akt].isdigit():
+            #second char is not a digit
+            #thus, rank is 1
             rank = "1"
         else:
             raise Exception(f"Rank greater than 14: `{cardStr}`")
@@ -140,6 +150,7 @@ def fromStr(cardStr: str) -> PlayingCard:
     else: raise Exception(f"Suit invalid: `{cardStr}`")
     return PlayingCard(rank, suit)
 
+print(fromStr("12hearts"))
 
 deckTypes = ("base", "abandoned", "checkered", "random") #verify name of last deck type
 
