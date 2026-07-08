@@ -153,7 +153,7 @@ def fromStr(cardStr: str) -> PlayingCard:
     return PlayingCard(rank, suit)
 
 
-deckTypes = ("base", "abandoned", "checkered", "random") #verify name of last deck type
+deckTypes = ("base", "abandoned", "checkered", "erratic")
 
 class Deck:
     def __init__(self, cardSet: set[PlayingCard]) -> None:
