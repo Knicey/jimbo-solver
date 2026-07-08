@@ -102,7 +102,7 @@ def fromStr(cardStr: str) -> PlayingCard:
     - substring of edition (f, fo -> foil; h, holo -> holographic)
     - substring of seal (g, go -> gold; b, bl -> blue)
     - 1-3 chars of enhancement (3 for steel and stone, 2 for gold and glass, 1 for others)
-    Examples:
+    Verified Examples:
     - 01dpp, 14DiamondsPolyPurple, adpoP, and acdipp => Ace of Diamonds, polychrome, purple seal
     - 13s_pl, kings puluck, KSPAD-pl => King of Spades, base edition, purple seal, lucky
     Does NOT support Hiker upgrades, sorry/not sorry
@@ -158,7 +158,6 @@ def fromStr(cardStr: str) -> PlayingCard:
     if akt >= len(cardStr) or cardStr[akt] in ignoredChars:
         akt += 1
     elif (r := "_fhp".find(cardStr[akt])) != -1:
-        #akt += 1
         for char in editions[r]:
             if char == cardStr[akt]:
                 akt += 1
@@ -176,7 +175,6 @@ def fromStr(cardStr: str) -> PlayingCard:
             elif char == cardStr[akt]: akt += 1
             else: break
         seal = seals[r]
-        #akt += 1
         
     enhancement = "base"
     
