@@ -1,4 +1,3 @@
-from curses.ascii import alt
 from random import randint
 from typing import assert_type
 
@@ -109,6 +108,7 @@ def fromStr(cardStr: str) -> PlayingCard:
     cardStr = cardStr.lower().strip()
     fullRanks = ("jack", "queen", "king", "ace")
     akt = 0 #index of cardStr currently being analyzed
+    ignoredChars = " _-"
     if cardStr[akt] == "1":
         #rank is either ace or >10
         akt += 1
@@ -150,30 +150,43 @@ def fromStr(cardStr: str) -> PlayingCard:
         suit = suits[r]
     else: raise Exception(f"Suit invalid: `{cardStr[akt:]}`")
     #suit parsing done
-    #TODO: edition, seal, and enhancement parsing
+    #now edition, seal, and enhancement parsing:
     edition = "base"
-    if (r := "_fhp".find(cardStr[akt])) != -1:
+    if akt >= len(cardStr) or cardStr[akt] in ignoredChars:
+        akt += 1
+    elif (r := "_fhp".find(cardStr[akt])) != -1:
+        #akt += 1
         for char in editions[r]:
-            if char == cardStr[akt] and akt < (len(cardStr) - 1): akt += 1
+            if char == cardStr[akt]:
+                akt += 1
+                if akt == len(cardStr): 
+                    break
             else: break
         edition = editions[r]
+
     seal = "base"
-    if (r := "_grbp".find(cardStr[akt])) != -1:
+    if akt >= len(cardStr) or cardStr[akt] in ignoredChars:
+        akt += 1
+    elif (r := "_grbp".find(cardStr[akt])) != -1:
         for char in seals[r]:
-            if char == cardStr[akt] and akt < (len(cardStr) - 1): akt += 1
+            if akt == (len(cardStr) - 1): break
+            elif char == cardStr[akt]: akt += 1
             else: break
         seal = seals[r]
-    #enhancements are a little more complicated because some enhancements share first and second letters
+        #akt += 1
+        
     enhancement = "base"
-    if (r := "bmw____l".find(cardStr[akt])) != -1:
+    
+    if akt >= len(cardStr) or cardStr[akt] in ignoredChars:
+        #could return instead, but this is basically the same
+        pass
+    elif (r := "bmwxxxxl".find(cardStr[akt])) != -1:
         enhancement = enhancements[r]
     elif cardStr[akt] == "g":
-        akt += 1
-        if cardStr[akt] == "l": enhancement = "glass"
+        if cardStr[akt + 1] == "l": enhancement = "glass"
         else: enhancement = "gold"
     elif cardStr[akt] == "s" and cardStr[akt + 1] == "t":
-        akt += 2
-        if cardStr[akt] == "e": enhancement = "steel"
+        if cardStr[akt + 2] == "e": enhancement = "steel"
         else: enhancement = "stone"
 
     return PlayingCard(rank, suit, edition, seal, enhancement)
