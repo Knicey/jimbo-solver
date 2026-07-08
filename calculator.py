@@ -34,8 +34,7 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]):
     num_pairs = list(rank_counts.values()).count(2)
 
     isStraight = max(ranks) - min(ranks) == len(ranks) - 1 and len(set(ranks)) == len(ranks)
-    #need to detect ace-low straights (A2345) and ace-high straights (10JQKA)
-    isStraight = False #temp
+    #TODO: verify detection of ace-low straights (A2345) and ace-high straights (10JQKA)
 
     match len(hand):
         case 0:
@@ -135,15 +134,48 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]):
 if __name__ == "__main__":
     # Example usage
     #hand1 = ["12H", '13D', '12D', '12H']
-    hand1 = [PlayingCard("j", "hearts"), PlayingCard("q", "diamonds"), PlayingCard("j", "diamonds"), PlayingCard("j", "hearts")]
+    hand1 = [PlayingCard("j", "hearts"), 
+             PlayingCard("q", "diamonds"), 
+             PlayingCard("j", "diamonds"), 
+             PlayingCard("j", "hearts")]
     #hand2 = ['12H', '12H', '12H', '12H', '12H']
+    hand2 = [PlayingCard("j", "hearts"), 
+             PlayingCard("j", "hearts"), 
+             PlayingCard("j", "hearts"), 
+             PlayingCard("j", "hearts"), 
+             PlayingCard("j", "hearts")]
     #hand3 = ['12H', '12H', '12H', '13H', '13H']
+    hand3 = [PlayingCard("j", "hearts"), 
+             PlayingCard("j", "hearts"), 
+             PlayingCard("j", "hearts"), 
+             PlayingCard("q", "hearts"),
+             PlayingCard("q", "hearts")]
     #hand4 = ['12H', '12H', '13H', '13H', '14H']
+    hand4 = [PlayingCard("j", "hearts"), 
+             PlayingCard("j", "hearts"), 
+             PlayingCard("q", "hearts"), 
+             PlayingCard("q", "hearts"),
+             PlayingCard("k", "hearts")]
     #hand5 = ['09H', '10H', '11H', '12H', '13H']
+    hand5 = [PlayingCard("9", "hearts"), 
+             PlayingCard("10", "hearts"), 
+             PlayingCard("j", "hearts"), 
+             PlayingCard("q", "hearts"),
+             PlayingCard("k", "hearts")]
     #hand6 = ['09H', '10H', '11H', '12H', '13C']
+    hand6 = [PlayingCard("9", "hearts"), 
+             PlayingCard("10", "hearts"), 
+             PlayingCard("j", "hearts"), 
+             PlayingCard("q", "hearts"),
+             PlayingCard("k", "clubs")]
     #hand7 = ['09H', '09H', '09C', '12D', '12D']
+    hand7 = [PlayingCard("9", "hearts"), 
+             PlayingCard("9", "hearts"), 
+             PlayingCard("9", "clubs"), 
+             PlayingCard("q", "diamonds"),
+             PlayingCard("q", "diamonds")]
 
-    all_hands = [hand1, ]#hand2, hand3, hand4, hand5, hand6, hand7]
+    all_hands = [hand1, hand2, hand3, hand4, hand5, hand6, hand7]
 
     for hand in all_hands:
         print(f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(hand)}")
