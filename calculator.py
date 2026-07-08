@@ -1,4 +1,4 @@
-from cards import PlayingCard, Deck, generateDeck, ranks
+from cards import PlayingCard
 
 
 def numericRank(rank: str, aceHigh: bool = False) -> int:
