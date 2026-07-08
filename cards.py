@@ -39,6 +39,15 @@ class PlayingCard:
         self._chips = 0
         self._mults = 0
         self.seeded = seeded
+    
+    def __repr__(self):
+        s = f"{self.rank.upper()} of {self.suit.title()}"
+        if self.edition != "base": s += f", {self.edition.title()}"
+        if self.seal != "base": s += f", {self.seal.title()}"
+        if self.enhancement != "base": s += f", {self.enhancement.title()}"
+        if self.hikerUpgrade > 0: s += f", Hiker +{self.hikerUpgrade}"
+        return s
+
     @property
     def chips(self) -> int:
         c = 0
