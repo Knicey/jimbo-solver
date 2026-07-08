@@ -1,6 +1,6 @@
 from cards import PlayingCard, ranks
 
-def high_card_scored_cards(hand: tuple[PlayingCard]) -> tuple[PlayingCard]:
+def high_card_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
     """
     Assuming that "High Card" is the highest tier for the hand, return what card will be scored.
 
