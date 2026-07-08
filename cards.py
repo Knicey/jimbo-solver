@@ -38,6 +38,7 @@ class PlayingCard:
         self.hikerUpgrade = hikerUpgrade
         self._chips = 0
         self._mults = 0
+        self.multmult = 1.5 if self.edition == "polychrome" else 1
         self.seeded = seeded
     @property
     def chips(self) -> int:
@@ -75,7 +76,6 @@ class PlayingCard:
                     seed = randint(1, 5)
                     if seed == 1: m += 20
             if self.edition == "holographic": m += 10
-            elif self.edition == "polychrome": m *= 1.5
         self._mults = m
         return self._mults
 
