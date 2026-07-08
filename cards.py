@@ -89,6 +89,50 @@ class PlayingCard:
         return self._mults
 
 
+def fromStr(cardStr: str) -> PlayingCard:
+    """
+    Expected input: 
+    - up to 2 digits (representing numerical rank, 1-14) or one letter (j, q, k, or a)
+    - substring of suit name (s, sp -> spades; d, dia -> diamond)
+    - substring of edition (f, fo -> foil; h, holo -> holographic)
+    - substring of seal (g, go -> gold; b, bl -> blue)
+    - substring of 
+    """
+    rank = ""
+    cardStr = cardStr.lower().strip()
+    fullRanks = ("jack", "queen", "king", "ace")
+    akt = 0 #index of cardStr currently being analyzed
+    if cardStr[akt] == "1":
+        #rank is either ace or >10
+        akt += 1
+        if cardStr[akt] in "0123": 
+            #rank is >10 but not ace
+            rank = cardStr[:akt + 1]
+        elif cardStr[akt] == "4" or (not cardStr[akt].isdigit()):
+            #first two characters are "14" or second char is not a digit
+            #thus, rank is 1 or 14 (ace)
+            rank = "1"
+        else:
+            raise Exception(f"Rank greater than 14: `{cardStr}`")
+    elif cardStr[akt] == "0":
+        akt += 1
+        if cardStr[akt] in "123456789":
+            #rank is ace or <10 with leading zero
+            #discard leading zero
+            rank = cardStr[akt]
+        else:
+            raise Exception(f"Rank equals 0: `{cardStr}`")
+    elif r := "jqka".find(cardStr[akt].lower()) != -1: #cheeky walrus operator
+        akt += 1
+        for char in fullRanks[r]:
+            if char == cardStr[akt].lower(): akt += 1 #continue along the substring
+            else: break #stop skipping chars once substring ends
+        rank = str(11 + r) if cardStr[akt].lower() != "a" else "1"
+    else: raise Exception(f"Rank invalid: `{cardStr}`")
+
+    suit = ""
+    return PlayingCard(rank, suit)
+
 deckTypes = ("base", "abandoned", "checkered", "random") #verify name of last deck type
 
 class Deck:
