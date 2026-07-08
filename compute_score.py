@@ -1,29 +1,38 @@
-import json
+from cards import PlayingCard, ranks
 
-def compute_high_card_score(hand):
+def high_card_scored_cards(hand: tuple[PlayingCard]) -> tuple[PlayingCard]:
     """
-    Assuming that "High Card" is the highest tier for the hand, compute the score.
+    Assuming that "High Card" is the highest tier for the hand, return what card will be scored.
 
     Args:
-        hand (list): A list containing a single card in the format "RankSuit".
-
+        hand (list): A set of PlayingCard objects.
     Returns:
-        int: The score for the High Card hand.
+        scored_cards (list): A set of cards that would be scored.
     """
+    if not hand:
+        return tuple()
+    
+    ranks_hierachy = tuple(ranks[1:] + ranks[:1])  # Move 'a' to the end of the list to make it the highest rank
 
-    ranks = [int(card[:2]) for card in hand]
+    max_card_rank = 0
+    max_rank_card = None
 
-    with open('hand_scores.json', 'r', encoding='utf-8') as file:
-        hand_scores = json.load(file)
+    for card in hand:
+        card_rank = ranks_hierachy.index(card.rank)
+        if card_rank >= max_card_rank:
+            max_card_rank = card_rank
+            max_rank_card = card
 
-    chips = hand_scores["high_card"]['chips']
-    mult = hand_scores["high_card"]['mult']
+    return tuple([max_rank_card]) if max_rank_card else tuple()
 
-    score = (chips + max(ranks)) * mult
-
-    return score
 
 
 if __name__ == "__main__":
-    hand = ["12H"]
-    print(f"The score of the hand {hand} is: {score_simple_hand(hand)}")
+    test_hand = (
+        PlayingCard(rank = '2', suit = 'hearts'),
+        PlayingCard(rank = 'k', suit = 'spades'),
+        PlayingCard(rank = 'q', suit = 'diamonds'),
+        PlayingCard(rank = '10', suit = 'clubs'),
+    )
+    scored_cards = high_card_scored_cards(test_hand)
+    print(f"The following card/s will be scored: {scored_cards[0].rank} of {scored_cards[0].suit}")  # Output: The following card/s will be scored: ('k', 'spades')
