@@ -1,3 +1,4 @@
+from curses.ascii import alt
 from random import randint
 from typing import assert_type
 
@@ -101,7 +102,8 @@ def fromStr(cardStr: str) -> PlayingCard:
     - substring of suit name (s, sp -> spades; d, dia -> diamond)
     - substring of edition (f, fo -> foil; h, holo -> holographic)
     - substring of seal (g, go -> gold; b, bl -> blue)
-    - substring of 
+    - 1-3 chars of enhancement (3 for steel and stone, 2 for gold and glass, 1 for others)
+    Does NOT support Hiker upgrades, sorry/not sorry
     """
     rank = ""
     cardStr = cardStr.lower().strip()
@@ -149,8 +151,32 @@ def fromStr(cardStr: str) -> PlayingCard:
     else: raise Exception(f"Suit invalid: `{cardStr[akt:]}`")
     #suit parsing done
     #TODO: edition, seal, and enhancement parsing
+    edition = "base"
+    if (r := "_fhp".find(cardStr[akt])) != -1:
+        for char in editions[r]:
+            if char == cardStr[akt] and akt < (len(cardStr) - 1): akt += 1
+            else: break
+        edition = editions[r]
+    seal = "base"
+    if (r := "_grbp".find(cardStr[akt])) != -1:
+        for char in seals[r]:
+            if char == cardStr[akt] and akt < (len(cardStr) - 1): akt += 1
+            else: break
+        seal = seals[r]
+    #enhancements are a little more complicated because some enhancements share first and second letters
+    enhancement = "base"
+    if (r := "bmw____l".find(cardStr[akt])) != -1:
+        enhancement = enhancements[r]
+    elif cardStr[akt] == "g":
+        akt += 1
+        if cardStr[akt] == "l": enhancement = "glass"
+        else: enhancement = "gold"
+    elif cardStr[akt] == "s" and cardStr[akt + 1] == "t":
+        akt += 2
+        if cardStr[akt] == "e": enhancement = "steel"
+        else: enhancement = "stone"
 
-    return PlayingCard(rank, suit)
+    return PlayingCard(rank, suit, edition, seal, enhancement)
 
 
 deckTypes = ("base", "abandoned", "checkered", "erratic")
