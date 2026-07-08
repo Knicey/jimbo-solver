@@ -1,55 +1,94 @@
 {
     "high_card": {
         "chips": 5,
-        "mult": 1
+        "mult": 1,
+        "upgrade_planet": "Pluto",
+        "per_upgrade_chips": 10,
+        "per_upgrade_mult": 1
     },
     "pair": {
         "chips": 10,
-        "mult": 2
+        "mult": 2,
+        "upgrade_planet": "Mercury",
+        "per_upgrade_chips": 15,
+        "per_upgrade_mult": 1
     },
     "two_pair": {
         "chips": 20,
-        "mult": 2
+        "mult": 2,
+        "upgrade_planet": "Uranus",
+        "per_upgrade_chips": 20,
+        "per_upgrade_mult": 1
     },
     "three_of_a_kind": {
         "chips": 30,
-        "mult": 3
+        "mult": 3,
+        "upgrade_planet": "Venus",
+        "per_upgrade_chips": 20,
+        "per_upgrade_mult": 2
     },
     "straight": {
         "chips": 30,
-        "mult": 4
+        "mult": 4,
+        "upgrade_planet": "Saturn",
+        "per_upgrade_chips": 30,
+        "per_upgrade_mult": 3
     },
     "flush": {
         "chips": 35,
-        "mult": 4
+        "mult": 4,
+        "upgrade_planet": "Jupiter",
+        "per_upgrade_chips": 15,
+        "per_upgrade_mult": 2
     },
     "full_house": {
         "chips": 40,
-        "mult": 4
+        "mult": 4,
+        "upgrade_planet": "Earth",
+        "per_upgrade_chips": 25,
+        "per_upgrade_mult": 2
     },
     "four_of_a_kind": {
         "chips": 60,
-        "mult": 7
+        "mult": 7,
+        "upgrade_planet": "Mars",
+        "per_upgrade_chips": 30,
+        "per_upgrade_mult": 3
     },
     "straight_flush": {
         "chips": 100,
-        "mult": 8
+        "mult": 8,
+        "upgrade_planet": "Neptune",
+        "per_upgrade_chips": 40,
+        "per_upgrade_mult": 4
     },
     "royal_flush": {
         "chips": 100,
-        "mult": 8
+        "mult": 8,
+        "upgrade_planet": "Neputune",
+        "per_upgrade_chips": 40,
+        "per_upgrade_mult": 4
     },
     "five_of_a_kind": {
         "chips": 120,
-        "mult": 12
+        "mult": 12,
+        "upgrade_planet": "Planet X",
+        "per_upgrade_chips": 35,
+        "per_upgrade_mult": 3
     },
     "flush_house": {
         "chips": 140,
-        "mult": 14
+        "mult": 14,
+        "upgrade_planet": "Ceres",
+        "per_upgrade_chips": 40,
+        "per_upgrade_mult": 4
     },
     "flush_five": {
         "chips": 160,
-        "mult": 16
+        "mult": 16,
+        "upgrade_planet": "Eris",
+        "per_upgrade_chips": 50,
+        "per_upgrade_mult": 3
     }
 
 }
