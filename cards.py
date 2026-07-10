@@ -148,8 +148,10 @@ def fromStr(cardStr: str) -> PlayingCard:
     suit = ""
     if (r := "schd".find(cardStr[akt])) != -1:
         for char in suits[r]:
-            if char == cardStr[akt] and akt < (len(cardStr) - 1): akt += 1
+            if char == cardStr[akt]:
+                akt += 1
             else: break
+            if akt >= len(cardStr): break
         suit = suits[r]
     else: raise Exception(f"Suit invalid: `{cardStr[akt:]}`")
     #suit parsing done
@@ -161,9 +163,8 @@ def fromStr(cardStr: str) -> PlayingCard:
         for char in editions[r]:
             if char == cardStr[akt]:
                 akt += 1
-                if akt == len(cardStr): 
-                    break
             else: break
+            if akt >= len(cardStr): break
         edition = editions[r]
 
     seal = "base"
@@ -171,9 +172,10 @@ def fromStr(cardStr: str) -> PlayingCard:
         akt += 1
     elif (r := "_grbp".find(cardStr[akt])) != -1:
         for char in seals[r]:
-            if akt == (len(cardStr) - 1): break
-            elif char == cardStr[akt]: akt += 1
+            if char == cardStr[akt]:
+                akt += 1
             else: break
+            if akt >= len(cardStr): break
         seal = seals[r]
         
     enhancement = "base"
@@ -181,7 +183,7 @@ def fromStr(cardStr: str) -> PlayingCard:
     if akt >= len(cardStr) or cardStr[akt] in ignoredChars:
         #could return instead, but this is basically the same
         pass
-    elif (r := "bmwxxxxl".find(cardStr[akt])) != -1:
+    elif (r := "xbmwxxxxl".find(cardStr[akt])) != -1:
         enhancement = enhancements[r]
     elif cardStr[akt] == "g":
         if cardStr[akt + 1] == "l": enhancement = "glass"
