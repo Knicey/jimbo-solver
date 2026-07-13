@@ -105,6 +105,72 @@ def three_of_a_kind_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[Playing
     return tuple(card for card in hand if card.rank == three_of_a_kind_rank)
 
 
+def straight_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
+    """
+    Assuming that "Straight" is the highest tier for the hand, return what cards will be scored.
+    
+    Args:
+        hand (tuple): A tuple of PlayingCard objects.
+    Returns:
+        scored_cards (tuple): A tuple of cards that would be scored.
+    """
+    if not hand:
+        return tuple()
+
+    ### TODO: Add support for four fingers / shortcut
+    ### Without these special jokers, computing which cards get scored is trivial
+
+    return hand
+
+
+def flush_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
+    """
+    Assuming that "Flush" is the highest tier for the hand, return what cards will be scored.
+
+    Args:
+        hand (tuple): A tuple of PlayingCard objects.
+    Returns:
+        scored_cards (tuple): A tuple of cards that would be scored.
+    """
+    if not hand:
+        return tuple()
+
+    ### TODO: Add support for four fingers / shortcut
+    ### Without these special jokers, computing which cards get scored is trivial
+
+    return hand
+
+def full_house_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
+    """
+    Assuming that "Full House" is the highest tier for the hand, return what cards will be scored.
+
+    Args:
+        hand (tuple): A tuple of PlayingCard objects.
+    Returns:
+        scored_cards (tuple): A tuple of cards that would be scored.
+    """
+    if not hand:
+        return tuple()
+
+    ### This one is always trivial since a Full House always requires 5 cards
+    return hand
+
+def four_oa_kind_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
+    """
+    Assuming that "Four of a Kind" is the highest tier for the hand, return what cards will be scored.
+
+    Args:
+        hand (tuple): A tuple of PlayingCard objects.
+    Returns:
+        scored_cards (tuple): A tuple of cards that would be scored.
+    """
+    if not hand:
+        return tuple()
+
+    card_ranks = [card.rank for card in hand]
+
+    return tuple(card for card in hand if card_ranks.count(card.rank) == 4)
+
 
 if __name__ == "__main__":
     test_hand = (
@@ -131,6 +197,9 @@ if __name__ == "__main__":
 
     test_hand4 = (PlayingCard('2', 'hearts'), PlayingCard('2', 'spades'), PlayingCard('2', 'diamonds'), PlayingCard('4', 'clubs'))
 
+    test_hand5 = (PlayingCard('2', 'hearts'), PlayingCard('2', 'spades'), PlayingCard('2', 'diamonds'), PlayingCard('2', 'clubs'),PlayingCard('3', 'clubs'))
+
+
     scored_cards = high_card_scored_cards(test_hand)
 
     scored_cards2 = pair_scored_cards(test_hand2)
@@ -138,5 +207,7 @@ if __name__ == "__main__":
     scored_cards3 = two_pair_scored_cards(test_hand3)
 
     scored_cards4 = three_of_a_kind_scored_cards(test_hand4)
+
+    scored_cards5 = four_oa_kind_scored_cards(test_hand5)
     
-    print(f"The following card/s will be scored: {scored_cards4}")  # Output: The following card/s will be scored: ('k', 'spades')
+    print(f"The following card/s will be scored: {scored_cards5}")  # Output: The following card/s will be scored: ('k', 'spades')
