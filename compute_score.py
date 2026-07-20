@@ -1,5 +1,39 @@
 from cards import PlayingCard, ranks
 
+four_fingers_scoring_functions = {
+    "high_card": 
+}
+
+
+def score_all_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
+    """
+    Some hand types are trivial and always require all 5 cards to be played.
+    
+
+    Without Four Fingers
+    - Straight
+    - Flush
+    - Straight Flush
+
+    Always
+    - Full House
+    - Flush House (hand must be a full house and a flush, four fingers makes it so that only 4 have to be same suit)
+    - Flush Five (hand must be 5 of the same rank and suit, four fingers makes it so that only 4 have to be same suit)
+
+    Args:
+        hand (tuple): A tuple of PlayingCard objects.
+    Returns:
+        scored_cards (tuple): A tuple of cards that would be scored.
+        
+    """
+    
+    if not hand:
+        return tuple()
+
+    return hand
+
+
+
 def high_card_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
     """
     Assuming that "High Card" is the highest tier for the hand, return what card will be scored.
@@ -53,6 +87,7 @@ def pair_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
 
     return tuple(card for card in hand if card.rank == pair_rank)
 
+
 def two_pair_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
     """
     Assuming that "Two Pair" is the highest tier for the hand, return what cards will be scored.
@@ -77,7 +112,7 @@ def two_pair_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, .
     return tuple(card for card in hand if card.rank in pairs)
 
 
-def three_of_a_kind_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
+def three_oa_kind_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
     """
     Assuming that "Three of a Kind" is the highest tier for the hand, return what cards will be scored.
     
@@ -105,9 +140,10 @@ def three_of_a_kind_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[Playing
     return tuple(card for card in hand if card.rank == three_of_a_kind_rank)
 
 
-def straight_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
+def straight_scored_cards(hand: tuple[PlayingCard, ...], four_fingers = False, shortcut = False) -> tuple[PlayingCard, ...]:
     """
-    Assuming that "Straight" is the highest tier for the hand, return what cards will be scored.
+    Assuming that "Flush" is the highest tier for the hand, return what cards will be scored.
+    Requires special calculation for four fingers joker
     
     Args:
         hand (tuple): A tuple of PlayingCard objects.
@@ -116,17 +152,23 @@ def straight_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, .
     """
     if not hand:
         return tuple()
+    
+    if not four_fingers:
+        return score_all_cards(hand)
+    
+    ### If the hand size is 4 with four-fingers active, it's always those 4 cards being played
+    if len(hand) == 4:
+        return hand
+    
+    ### If the hand size is 5 with four-fingers active, need to verify if 4 or 5 cards need to be played
+    suits = [card.suit for card in hand]
 
-    ### TODO: Add support for four fingers / shortcut
-    ### Without these special jokers, computing which cards get scored is trivial
 
-    return hand
-
-
-def flush_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
+def flush_scored_cards(hand: tuple[PlayingCard, ...], four_fingers = False) -> tuple[PlayingCard, ...]:
     """
     Assuming that "Flush" is the highest tier for the hand, return what cards will be scored.
-
+    Requires special calculation for four fingers joker
+    
     Args:
         hand (tuple): A tuple of PlayingCard objects.
     Returns:
@@ -134,26 +176,32 @@ def flush_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]
     """
     if not hand:
         return tuple()
+    
+    if not four_fingers:
+        return score_all_cards(hand)
+    
+    ### If the hand size is 4 with four-fingers active, it's always those 4 cards being played
+    if len(hand) == 4:
+        return hand
+    
+    ### If the hand size is 5 with four-fingers active, need to verify if 4 or 5 cards need to be played
+    suits = [card.suit for card in hand]
+    
+    suit_counts = {suit: suits.count(suit) for suit in set(suits)}
 
-    ### TODO: Add support for four fingers / shortcut
-    ### Without these special jokers, computing which cards get scored is trivial
+    ### One suit means all cards should be scored
+    if len(suit_counts.keys()) == 1:
+        return hand
+    
+    else:
+        match_4_key = None
+        for key in suit_counts.keys():
+            if suit_counts[key] == 4:
+                match_4_key = key
+        
+        return tuple(card for card in hand if card.suit == match_4_key)
 
-    return hand
 
-def full_house_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
-    """
-    Assuming that "Full House" is the highest tier for the hand, return what cards will be scored.
-
-    Args:
-        hand (tuple): A tuple of PlayingCard objects.
-    Returns:
-        scored_cards (tuple): A tuple of cards that would be scored.
-    """
-    if not hand:
-        return tuple()
-
-    ### This one is always trivial since a Full House always requires 5 cards
-    return hand
 
 def four_oa_kind_scored_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
     """
@@ -206,7 +254,7 @@ if __name__ == "__main__":
 
     scored_cards3 = two_pair_scored_cards(test_hand3)
 
-    scored_cards4 = three_of_a_kind_scored_cards(test_hand4)
+    scored_cards4 = three_oa_kind_scored_cards(test_hand4)
 
     scored_cards5 = four_oa_kind_scored_cards(test_hand5)
     
