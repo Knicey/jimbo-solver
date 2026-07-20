@@ -65,7 +65,7 @@
     "royal_flush": {
         "chips": 100,
         "mult": 8,
-        "upgrade_planet": "Neputune",
+        "upgrade_planet": "Neptune",
         "per_upgrade_chips": 40,
         "per_upgrade_mult": 4
     },
