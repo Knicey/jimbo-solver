@@ -5,6 +5,8 @@ testCases = {
     "10h": ("10", "hearts"),
     "1hh": ("a", "hearts", "holographic"),
     "1hbl": ("a", "hearts", "base", "blue"),
+    "1h_bl": ("a", "hearts", "base", "blue"),
+    "1hb_l": ("a", "hearts", "base", "blue"),
     "01difopul": ("a", "diamonds", "foil", "purple", "lucky"),
     "01dpp": ("a", "diamonds", "polychrome", "purple"),
     "14DiamondsPolyPurple": ("a", "diamonds", "polychrome", "purple"),
