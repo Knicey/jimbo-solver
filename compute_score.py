@@ -187,19 +187,14 @@ def flush_scored_cards(hand: tuple[PlayingCard, ...], four_fingers = False) -> t
     ### If the hand size is 5 with four-fingers active, need to verify if 4 or 5 cards need to be played
     suits = [card.suit for card in hand]
     
-    suit_counts = {suit: suits.count(suit) for suit in set(suits)}
 
     ### One suit means all cards should be scored
-    if len(suit_counts.keys()) == 1:
+    if len(set(suits)) == 1:
         return hand
     
+    ### More than one suit, means it's a match of 4
     else:
-        match_4_key = None
-        for key in suit_counts.keys():
-            if suit_counts[key] == 4:
-                match_4_key = key
-        
-        return tuple(card for card in hand if card.suit == match_4_key)
+        return tuple(card for card in hand if suits.count(card.suit) == 4)
 
 
 
