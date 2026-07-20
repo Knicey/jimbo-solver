@@ -102,6 +102,7 @@ def fromStr(cardStr: str) -> PlayingCard:
     - substring of edition (f, fo -> foil; h, holo -> holographic)
     - substring of seal (g, go -> gold; b, bl -> blue)
     - 1-3 chars of enhancement (3 for steel and stone, 2 for gold and glass, 1 for others)
+    - to force a property to be `base`, the characters ` `, `-`, and `_` can be used. ex: 1h_b has a blue seal, whereas 1h__b is a bonus card with no seal
     Verified Examples:
     - 01dpp, 14DiamondsPolyPurple, adpoP, and acdipp => Ace of Diamonds, polychrome, purple seal
     - 13s_pl, kings puluck, KSPAD-pl => King of Spades, base edition, purple seal, lucky
