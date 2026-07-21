@@ -26,7 +26,7 @@ def determine_highest_hand_ranking(hand: Sequence[PlayingCard | str]) -> str:
     if not hand:
         return ""
 
-    played = [fromStr(card) for card in hand if type(card) == str]
+    played = [fromStr(str(card)) for card in hand]
 
     ranks = [numericRank(card.rank, False) for card in played]
     for _ in range(ranks.count(1)):
@@ -43,6 +43,7 @@ def determine_highest_hand_ranking(hand: Sequence[PlayingCard | str]) -> str:
 
     isStraight = max(ranks) - min(ranks) == len(ranks) - \
         1 and len(set(ranks)) == len(ranks)
+    #doesn't seem to detect ace-low straights
 
     nOfRank = ("", "high_card", "pair", "three_of_a_kind",
                "four_of_a_kind", "five_of_a_kind")[highest_rank_count]
