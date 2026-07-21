@@ -1,9 +1,5 @@
 from cards import PlayingCard, ranks
 
-four_fingers_scoring_functions = {
-    "high_card": 
-}
-
 
 def score_all_cards(hand: tuple[PlayingCard, ...]) -> tuple[PlayingCard, ...]:
     """
