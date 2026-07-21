@@ -133,15 +133,15 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]):
 
 if __name__ == "__main__":
     # Example usage
-    hand1 = ["12H", '13D', '12D', '12H']
-    hand2 = ['12H', '12H', '12H', '12H', '12H']
-    hand3 = ['12H', '12H', '12H', '13H', '13H']
-    hand4 = ['12H', '12H', '13H', '13H', '14H']
-    hand5 = ['09H', '10H', '11H', '12H', '13H']
-    hand6 = ['09H', '10H', '11H', '12H', '13C']
-    hand7 = ['09H', '09H', '09C', '12D', '12D']
-
-    all_hands = [hand1, hand2, hand3, hand4, hand5, hand6, hand7]
+    all_hands = [
+        ["12H", '13D', '12D', '12H'],
+        ['12H', '12H', '12H', '12H', '12H'],
+        ['12H', '12H', '12H', '13H', '13H'],
+        ['12H', '12H', '13H', '13H', '14H'],
+        ['09H', '10H', '11H', '12H', '13H'],
+        ['09H', '10H', '11H', '12H', '13C'],
+        ['09H', '09H', '09C', '12D', '12D'],
+    ]
 
     for hand in all_hands:
         parsed = [fromStr(i) for i in hand]
