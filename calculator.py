@@ -1,3 +1,4 @@
+from typing import Sequence
 from cards import PlayingCard, fromStr
 
 
@@ -11,7 +12,7 @@ def numericRank(rank: str, aceHigh: bool = False) -> int:
         return int(rank)
 
 
-def determine_highest_hand_ranking(hand: list[PlayingCard]) -> str:
+def determine_highest_hand_ranking(hand: Sequence[PlayingCard | str]) -> str:
     """
     Calculate what the highest ranked hand available is.
 
@@ -25,10 +26,12 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]) -> str:
     if not hand:
         return ""
 
-    ranks = [numericRank(card.rank, False) for card in hand]
+    played = [fromStr(card) for card in hand if type(card) == str]
+
+    ranks = [numericRank(card.rank, False) for card in played]
     for _ in range(ranks.count(1)):
         ranks.append(numericRank("a", True))
-    suits = [card.suit for card in hand]
+    suits = [card.suit for card in played]
 
     rank_counts = {rank: ranks.count(rank) for rank in set(ranks)}
     suit_counts = {suit: suits.count(suit) for suit in set(suits)}
@@ -45,7 +48,7 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]) -> str:
                "four_of_a_kind", "five_of_a_kind")[highest_rank_count]
     isFlush = highest_suit_count == 5
 
-    if len(hand) <= 4:
+    if len(played) <= 4:
         # since num_pairs is the number of distinct pairs, a 3- and 4-of-a-kinds require num_pairs=1
         # thus, if a two-pair is playable, 3- and 4-of-a-kind's are not playable, so it's the best hand
         return "two_pair" if num_pairs == 2 else nOfRank
@@ -85,6 +88,5 @@ if __name__ == "__main__":
     ]
 
     for hand in all_hands:
-        parsed = [fromStr(i) for i in hand]
         print(
-            f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(parsed)}")
+            f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(hand)}")
