@@ -127,46 +127,46 @@ def determine_highest_hand_ranking(hand):
 if __name__ == "__main__":
     # Example usage
     #hand1 = ["12H", '13D', '12D', '12H']
-    hand1 = [PlayingCard("j", "hearts"), 
-             PlayingCard("q", "diamonds"), 
-             PlayingCard("j", "diamonds"), 
-             PlayingCard("j", "hearts")]
+    hand1 = [fromStr("jh"), 
+             fromStr("qd"), 
+             fromStr("jd"), 
+             fromStr("jh")]
     #hand2 = ['12H', '12H', '12H', '12H', '12H']
-    hand2 = [PlayingCard("j", "hearts"), 
-             PlayingCard("j", "hearts"), 
-             PlayingCard("j", "hearts"), 
-             PlayingCard("j", "hearts"), 
-             PlayingCard("j", "hearts")]
+    hand2 = [fromStr("jh"), 
+             fromStr("jh"), 
+             fromStr("jh"), 
+             fromStr("jh"), 
+             fromStr("jh")]
     #hand3 = ['12H', '12H', '12H', '13H', '13H']
-    hand3 = [PlayingCard("j", "hearts"), 
-             PlayingCard("j", "hearts"), 
-             PlayingCard("j", "hearts"), 
-             PlayingCard("q", "hearts"),
-             PlayingCard("q", "hearts")]
+    hand3 = [fromStr("jh"), 
+             fromStr("jh"), 
+             fromStr("jh"), 
+             fromStr("qh"),
+             fromStr("qh")]
     #hand4 = ['12H', '12H', '13H', '13H', '14H']
-    hand4 = [PlayingCard("j", "hearts"), 
-             PlayingCard("j", "hearts"), 
-             PlayingCard("q", "hearts"), 
-             PlayingCard("q", "hearts"),
-             PlayingCard("k", "hearts")]
+    hand4 = [fromStr("jh"), 
+             fromStr("jh"), 
+             fromStr("qh"), 
+             fromStr("qh"),
+             fromStr("kh")]
     #hand5 = ['09H', '10H', '11H', '12H', '13H']
-    hand5 = [PlayingCard("9", "hearts"), 
-             PlayingCard("10", "hearts"), 
-             PlayingCard("j", "hearts"), 
-             PlayingCard("q", "hearts"),
-             PlayingCard("k", "hearts")]
+    hand5 = [fromStr("9h"), 
+             fromStr("10h"), 
+             fromStr("jh"), 
+             fromStr("qh"),
+             fromStr("kh")]
     #hand6 = ['09H', '10H', '11H', '12H', '13C']
-    hand6 = [PlayingCard("9", "hearts"), 
-             PlayingCard("10", "hearts"), 
-             PlayingCard("j", "hearts"), 
-             PlayingCard("q", "hearts"),
-             PlayingCard("k", "clubs")]
+    hand6 = [fromStr("9h"), 
+             fromStr("10h"), 
+             fromStr("jh"), 
+             fromStr("qh"),
+             fromStr("kc")]
     #hand7 = ['09H', '09H', '09C', '12D', '12D']
-    hand7 = [PlayingCard("9", "hearts"), 
-             PlayingCard("9", "hearts"), 
-             PlayingCard("9", "clubs"), 
-             PlayingCard("q", "diamonds"),
-             PlayingCard("q", "diamonds")]
+    hand7 = [fromStr("9h"), 
+             fromStr("9h"), 
+             fromStr("9c"), 
+             fromStr("qd"),
+             fromStr("qd")]
 
     all_hands = [hand1, hand2, hand3, hand4, hand5, hand6, hand7]
 
