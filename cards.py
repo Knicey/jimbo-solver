@@ -22,6 +22,11 @@ class PlayingCard:
                  seeded: int = 0,
                  hikerUpgrade: int = 0) -> None:
         #probably a more elegant way to do this
+        if rank.isdigit():
+            if int(rank) == 1:
+                rank = "a"
+            elif int(rank) > 10:
+                rank = (faceRanks + ["a"])[int(rank) - 11]
         assert rank in ranks
         assert suit in suits
         assert edition in editions
@@ -87,6 +92,108 @@ class PlayingCard:
             if self.edition == "holographic": m += 10
         self._mults = m
         return self._mults
+
+
+def fromStr(cardStr: str) -> PlayingCard:
+    """
+    Expected input: 
+    - up to 2 digits (representing numerical rank, 1-14) or one letter (j, q, k, or a)
+    - substring of suit name (s, sp -> spades; d, dia -> diamond)
+    - substring of edition (f, fo -> foil; h, holo -> holographic)
+    - substring of seal (g, go -> gold; b, bl -> blue)
+    - 1-3 chars of enhancement (3 for steel and stone, 2 for gold and glass, 1 for others)
+    - to force a property to be `base`, the characters ` `, `-`, and `_` can be used. ex: 1h_b has a blue seal, whereas 1h__b is a bonus card with no seal
+    Verified Examples:
+    - 01dpp, 14DiamondsPolyPurple, adpoP, and acdipp => Ace of Diamonds, polychrome, purple seal
+    - 13s_pl, kings puluck, KSPAD-pl => King of Spades, base edition, purple seal, lucky
+    Does NOT support Hiker upgrades, sorry/not sorry
+    """
+    rank = ""
+    cardStr = cardStr.lower().strip()
+    fullRanks = ("jack", "queen", "king", "ace")
+    akt = 0 #index of cardStr currently being analyzed
+    ignoredChars = " _-"
+    if cardStr[akt] == "1":
+        #rank is either ace or >10
+        akt += 1
+        if cardStr[akt] in "0123": 
+            #rank is >10 but not ace
+            rank = cardStr[:akt + 1]
+            akt += 1
+        elif cardStr[akt] == "4":
+            #rank 14 => ace
+            rank = "1"
+            akt += 1
+        elif not cardStr[akt].isdigit():
+            #second char is not a digit
+            #thus, rank is 1
+            rank = "1"
+        else:
+            raise Exception(f"Rank greater than 14: `{cardStr}`")
+    elif cardStr[akt] == "0":
+        akt += 1
+        if cardStr[akt] in "123456789":
+            #rank is ace or <10 with leading zero
+            #discard leading zero
+            rank = cardStr[akt]
+            akt += 1
+        else:
+            raise Exception(f"Rank equals 0: `{cardStr}`")
+    elif (r := "jqka".find(cardStr[akt])) != -1: #cheeky walrus operator
+        for char in fullRanks[r]:
+            if char == cardStr[akt] and akt < (len(cardStr) - 1): akt += 1 #continue along the substring
+            else: break #stop skipping chars once substring ends
+        rank = str(11 + r) if cardStr[akt] != "a" else "1"
+    else: raise Exception(f"Rank invalid: `{cardStr}`")
+    #rank parsing done, time for the suit:
+    suit = ""
+    if (r := "schd".find(cardStr[akt])) != -1:
+        for char in suits[r]:
+            if char == cardStr[akt]:
+                akt += 1
+            else: break
+            if akt >= len(cardStr): break
+        suit = suits[r]
+    else: raise Exception(f"Suit invalid: `{cardStr[akt:]}`")
+    #suit parsing done
+    #now edition, seal, and enhancement parsing:
+    edition = "base"
+    if akt >= len(cardStr) or cardStr[akt] in ignoredChars:
+        akt += 1
+    elif (r := "_fhp".find(cardStr[akt])) != -1:
+        for char in editions[r]:
+            if char == cardStr[akt]:
+                akt += 1
+            else: break
+            if akt >= len(cardStr): break
+        edition = editions[r]
+
+    seal = "base"
+    if akt >= len(cardStr) or cardStr[akt] in ignoredChars:
+        akt += 1
+    elif (r := "_grbp".find(cardStr[akt])) != -1:
+        for char in seals[r]:
+            if char == cardStr[akt]:
+                akt += 1
+            else: break
+            if akt >= len(cardStr): break
+        seal = seals[r]
+        
+    enhancement = "base"
+    
+    if akt >= len(cardStr) or cardStr[akt] in ignoredChars:
+        #could return instead, but this is basically the same
+        pass
+    elif (r := "xbmwxxxxl".find(cardStr[akt])) != -1:
+        enhancement = enhancements[r]
+    elif cardStr[akt] == "g":
+        if cardStr[akt + 1] == "l": enhancement = "glass"
+        else: enhancement = "gold"
+    elif cardStr[akt] == "s" and cardStr[akt + 1] == "t":
+        if cardStr[akt + 2] == "e": enhancement = "steel"
+        else: enhancement = "stone"
+
+    return PlayingCard(rank, suit, edition, seal, enhancement)
 
 
 deckTypes = ("base", "abandoned", "checkered", "erratic")
