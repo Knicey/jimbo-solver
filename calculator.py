@@ -133,49 +133,16 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]):
 
 if __name__ == "__main__":
     # Example usage
-    #hand1 = ["12H", '13D', '12D', '12H']
-    hand1 = [fromStr("jh"), 
-             fromStr("qd"), 
-             fromStr("jd"), 
-             fromStr("jh")]
-    #hand2 = ['12H', '12H', '12H', '12H', '12H']
-    hand2 = [fromStr("jh"), 
-             fromStr("jh"), 
-             fromStr("jh"), 
-             fromStr("jh"), 
-             fromStr("jh")]
-    #hand3 = ['12H', '12H', '12H', '13H', '13H']
-    hand3 = [fromStr("jh"), 
-             fromStr("jh"), 
-             fromStr("jh"), 
-             fromStr("qh"),
-             fromStr("qh")]
-    #hand4 = ['12H', '12H', '13H', '13H', '14H']
-    hand4 = [fromStr("jh"), 
-             fromStr("jh"), 
-             fromStr("qh"), 
-             fromStr("qh"),
-             fromStr("kh")]
-    #hand5 = ['09H', '10H', '11H', '12H', '13H']
-    hand5 = [fromStr("9h"), 
-             fromStr("10h"), 
-             fromStr("jh"), 
-             fromStr("qh"),
-             fromStr("kh")]
-    #hand6 = ['09H', '10H', '11H', '12H', '13C']
-    hand6 = [fromStr("9h"), 
-             fromStr("10h"), 
-             fromStr("jh"), 
-             fromStr("qh"),
-             fromStr("kc")]
-    #hand7 = ['09H', '09H', '09C', '12D', '12D']
-    hand7 = [fromStr("9h"), 
-             fromStr("9h"), 
-             fromStr("9c"), 
-             fromStr("qd"),
-             fromStr("qd")]
+    hand1 = ["12H", '13D', '12D', '12H']
+    hand2 = ['12H', '12H', '12H', '12H', '12H']
+    hand3 = ['12H', '12H', '12H', '13H', '13H']
+    hand4 = ['12H', '12H', '13H', '13H', '14H']
+    hand5 = ['09H', '10H', '11H', '12H', '13H']
+    hand6 = ['09H', '10H', '11H', '12H', '13C']
+    hand7 = ['09H', '09H', '09C', '12D', '12D']
 
     all_hands = [hand1, hand2, hand3, hand4, hand5, hand6, hand7]
 
     for hand in all_hands:
-        print(f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(hand)}")
+        parsed = [fromStr(i) for i in hand]
+        print(f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(parsed)}")
