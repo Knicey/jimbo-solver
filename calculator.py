@@ -36,100 +36,35 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]):
     isStraight = max(ranks) - min(ranks) == len(ranks) - 1 and len(set(ranks)) == len(ranks)
     #TODO: verify detection of ace-low straights (A2345) and ace-high straights (10JQKA)
 
-    match len(hand):
-        case 0:
-            ### If no cards are played, no score is given
-            return 0
-        case 1:
-            ### If there is only one card in the hand, it can only score as "High Card"
-            return "high_card"
+    nOfRank = ("", "high_card", "pair", "three_of_a_kind", "four_of_a_kind", "five_of_a_kind")[highest_rank_count]
+    isFlush = highest_suit_count == 5 #ez
 
-        case 2:
-            ### If the are only two cards played, it can either be a pair or still high card
-            if highest_rank_count == 2:
-                return "pair"
-            
-            else:
-                return "high_card"
-
-
-        case 3:
-            ### If there are three cards played, it can either be a three of a kind or any of the previous options
-            if highest_rank_count == 3:
-                return "three_of_a_kind"
-            
-            elif highest_rank_count == 2:
-                return "pair"
-            
-            else:
-                return "high_card"
-            
-        case 4:
-            ### If there are four cards played, it can either be a four of a kind, two pair or any of the previous options
-            if highest_rank_count == 4:
-                return "four_of_a_kind"
-            
-            ### If there are two ranks that have a count of 2, then it is a two pair
-            elif num_pairs == 2:
-                return "two_pair"
-            
-            elif highest_rank_count == 3:
-                return "three_of_a_kind"
-            
-            elif highest_rank_count == 2:
-                return "pair"
-            
-            else:
-                return "high_card"
-            
-        case 5:
-            ### If there are five cards played, it can be anything
-
-            ### Balatro has 3 hands that are possible to achieve in traditional poker
-
-            # Flush Five: All 5 cards have matching ranks and suits
-            if highest_suit_count == 5 and highest_rank_count == 5:
-                return "flush_five"
-            
-            # Flush House: All 5 cards have matching suits, but a full house for the ranks
-            elif highest_suit_count == 5 and highest_rank_count == 3 and num_pairs == 1:
-                return "flush_house"
-            
-            # Five of a Kind: All 5 cards have matching ranks
-            elif highest_rank_count == 5:
-                return "five_of_a_kind"
-            
-            ### These are the rest of the traditional possible poker hands
-
-            elif highest_suit_count == 5 and isStraight:
-                return "straight_flush"
-
-            elif highest_suit_count == 5:
-                return "flush"
-            
-            elif isStraight:
-                return "straight"
-            
-            elif highest_rank_count == 3 and num_pairs == 1:
-                return "full_house"
-            
-            
-            elif highest_rank_count == 4:
-                return "four_of_a_kind"
-            
-            elif highest_rank_count == 3:
-                return "three_of_a_kind"
-            
-            elif num_pairs == 2:
-                return "two_pair"
-            
-            elif highest_rank_count == 2:
-                return "pair"
-            
-            else:
-                return "high_card"
-    
-    return 0
+    if len(hand) < 4:
+        #logic is very easy for small hands, since 3 > 2 > 1-of-a-kind
+        return nOfRank
+    elif len(hand) == 4:
+        #since num_pairs is the number of distinct pairs, a 3- and 4-of-a-kinds require num_pairs=1
+        #thus, if a two-pair is playable, 3- and 4-of-a-kind's are not playable, so it's the best hand
+        return "two_pair" if num_pairs == 2 else nOfRank
+    else:
+        match highest_rank_count:
+            case 5:
+                return "flush_five" if isFlush else nOfRank
+            case 3:
+                #assert num_pairs != 2 #i think this is true
+                if num_pairs == 1:
+                    return "flush_house" if isFlush else "full_house"
+                else: #num_pairs == 0, so no two-pair
+                    return nOfRank
+            case 1:
+                if isFlush:
+                    return "straight_flush" if isStraight else "flush"
+                else:
+                    return "straight" if isStraight else nOfRank
+            case 2:
+                return "two_pair" if num_pairs == 2 else nOfRank
+            case _:
+                return nOfRank
 
 if __name__ == "__main__":
     # Example usage
