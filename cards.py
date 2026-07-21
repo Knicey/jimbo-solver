@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, choice
 from typing import assert_type
 
 
@@ -236,7 +236,7 @@ class Deck:
 def generateDeck(d: str = "base") -> set[PlayingCard]:
     assert d in deckTypes
     cardSet = set()
-    if d != "random":
+    if d != "erratic":
         filteredRanks = ranks
         filteredSuits = suits
         if d != "base":
@@ -247,7 +247,6 @@ def generateDeck(d: str = "base") -> set[PlayingCard]:
                 #different objects get hashed separately, even if they have the same attributes
                 cardSet.add(PlayingCard(r, s))
     else: 
-        #TODO
-        #need to look at how Balatro generates it
-        pass
+        for _ in range(len(ranks) * len(suits)): #could just set this to 52 but i feel fancy
+            cardSet.add(PlayingCard(choice(ranks), choice(suits)))
     return cardSet
