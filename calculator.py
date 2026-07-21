@@ -14,9 +14,8 @@ def determine_highest_hand_ranking(hand):
     if not hand:
         return 0
 
-    ranks = [numericRank(card.rank, False) for card in hand]
-    for _ in range(ranks.count(1)): ranks.append(numericRank("a", True))
-    suits = [card.suit for card in hand]
+    ranks = [int(card[:2]) for card in hand]
+    suits = [card[2] for card in hand]
 
     rank_counts = {rank: ranks.count(rank) for rank in set(ranks)}
     suit_counts = {suit: suits.count(suit) for suit in set(suits)}
@@ -27,8 +26,8 @@ def determine_highest_hand_ranking(hand):
     num_pairs = list(rank_counts.values()).count(2)
 
     isStraight = max(ranks) - min(ranks) == len(ranks) - 1 and len(set(ranks)) == len(ranks)
-    #TODO: verify detection of ace-low straights (A2345) and ace-high straights (10JQKA)
 
+    
     match len(hand):
         case 0:
             ### If no cards are played, no score is given
@@ -132,9 +131,9 @@ if __name__ == "__main__":
     hand4 = ['12H', '12H', '13H', '13H', '14H']
     hand5 = ['09H', '10H', '11H', '12H', '13H']
     hand6 = ['09H', '10H', '11H', '12H', '13C']
-    hand7 = ['09H', '09H', '09C', '12D', '12D']
+    hand6 = ['09H', '09H', '09C', '12D', '12D']
 
-    all_hands = [hand1, hand2, hand3, hand4, hand5, hand6, hand7]
+    all_hands = [hand1, hand2, hand3, hand4, hand5, hand6]
 
     for hand in all_hands:
         print(f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(hand)}")
