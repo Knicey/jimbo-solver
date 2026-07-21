@@ -36,7 +36,7 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]):
     highest_rank_count = max(rank_counts.values())
     highest_suit_count = max(suit_counts.values())
 
-    num_pairs = list(rank_counts.values()).count(2)
+    num_pairs = [v for k, v in rank_counts.items() if k != 14].count(2)
 
     isStraight = max(ranks) - min(ranks) == len(ranks) - \
         1 and len(set(ranks)) == len(ranks)
@@ -46,10 +46,7 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]):
                "four_of_a_kind", "five_of_a_kind")[highest_rank_count]
     isFlush = highest_suit_count == 5  # ez
 
-    if len(hand) < 4:
-        # logic is very easy for small hands, since 3 > 2 > 1-of-a-kind
-        return nOfRank
-    elif len(hand) == 4:
+    if len(hand) <= 4:
         # since num_pairs is the number of distinct pairs, a 3- and 4-of-a-kinds require num_pairs=1
         # thus, if a two-pair is playable, 3- and 4-of-a-kind's are not playable, so it's the best hand
         return "two_pair" if num_pairs == 2 else nOfRank
@@ -84,6 +81,8 @@ if __name__ == "__main__":
         ["09H", "10H", "11H", "12H", "13H"],
         ["09H", "10H", "11H", "12H", "13C"],
         ["09H", "09H", "09C", "12D", "12D"],
+        ["14H", "14D", "13D", "11H"],  # returns `pair`
+        ["14H", "14D", "11D", "11H"],  # returns `two_pair`
     ]
 
     for hand in all_hands:
