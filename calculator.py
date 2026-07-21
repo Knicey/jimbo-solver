@@ -11,7 +11,7 @@ def numericRank(rank: str, aceHigh: bool = False) -> int:
         return int(rank)
 
 
-def determine_highest_hand_ranking(hand: list[PlayingCard]):
+def determine_highest_hand_ranking(hand: list[PlayingCard]) -> str:
     """
     Calculate what the highest ranked hand available is.
 
@@ -23,7 +23,7 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]):
     """
 
     if not hand:
-        return 0
+        return ""
 
     ranks = [numericRank(card.rank, False) for card in hand]
     for _ in range(ranks.count(1)):
@@ -40,11 +40,10 @@ def determine_highest_hand_ranking(hand: list[PlayingCard]):
 
     isStraight = max(ranks) - min(ranks) == len(ranks) - \
         1 and len(set(ranks)) == len(ranks)
-    # TODO: verify detection of ace-low straights (A2345) and ace-high straights (10JQKA)
 
     nOfRank = ("", "high_card", "pair", "three_of_a_kind",
                "four_of_a_kind", "five_of_a_kind")[highest_rank_count]
-    isFlush = highest_suit_count == 5  # ez
+    isFlush = highest_suit_count == 5
 
     if len(hand) <= 4:
         # since num_pairs is the number of distinct pairs, a 3- and 4-of-a-kinds require num_pairs=1
