@@ -83,6 +83,7 @@ def determine_highest_hand_ranking(hand: Sequence[PlayingCard | str]) -> str:
                 else:
                     return "straight" if isStraight else nOfRank
             case 2:
+                if isFlush: return "flush"
                 return "two_pair" if num_pairs == 2 else nOfRank
             case _:
                 return nOfRank
