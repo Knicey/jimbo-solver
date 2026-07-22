@@ -1,6 +1,8 @@
 from typing import Sequence
 from cards import PlayingCard, fromStr, suits
 
+#names of hands that consist of n repeated ranks
+repHands = ("", "high_card", "pair", "three_of_a_kind", "four_of_a_kind", "five_of_a_kind")
 
 def numericRank(rank: str, aceHigh: bool = False) -> int:
     faceOrder = ("j", "q", "k")
@@ -53,8 +55,7 @@ def determine_highest_hand_ranking(hand: Sequence[PlayingCard | str]) -> str:
         else:
             isStraight = max(ranks) - min(ranks) == 4
 
-    nOfRank = ("", "high_card", "pair", "three_of_a_kind",
-               "four_of_a_kind", "five_of_a_kind")[highest_rank_count]
+    nOfRank = repHands[highest_rank_count]
     isFlush = highest_suit_count == 5
 
     if len(played) <= 4:
