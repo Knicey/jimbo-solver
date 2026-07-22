@@ -92,20 +92,21 @@ def determine_highest_hand_ranking(hand: Sequence[PlayingCard | str]) -> str:
 
 if __name__ == "__main__":
     # Example usage
-    all_hands = [
-        ["12H", "13D", "12D", "12H"],
-        ["12H", "12H", "12H", "12H", "12H"],
-        ["12H", "12H", "12H", "13H", "13H"],
-        ["12H", "12H", "13H", "13H", "14H"],
-        ["09H", "10H", "11H", "12H", "13H"],
-        ["09H", "10H", "11H", "12H", "13C"],
-        ["09H", "09H", "09C", "12D", "12D"],
-        ["14H", "14D", "13D", "11H"],  # returns `pair`
-        ["14H", "14D", "11D", "11H"],  # returns `two_pair`
-        ["01H", "02H", "03H", "04H", "05C"],  # returns `straight`
-        ["10S", "jH ", "qD ", "kD ", "aH "],  # returns `straight`
-        ["1h ", "1h ", "1h ", "1h ", "1cw"],  # returns `flush_five`
-    ]
-    for hand in all_hands:
-        print(
-            f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(hand)}")
+    # all_hands = [
+    #     ["12H", "13D", "12D", "12H"],
+    #     ["12H", "12H", "12H", "12H", "12H"],
+    #     ["12H", "12H", "12H", "13H", "13H"],
+    #     ["12H", "12H", "13H", "13H", "14H"],
+    #     ["09H", "10H", "11H", "12H", "13H"],
+    #     ["09H", "10H", "11H", "12H", "13C"],
+    #     ["09H", "09H", "09C", "12D", "12D"],
+    #     ["14H", "14D", "13D", "11H"],  # returns `pair`
+    #     ["14H", "14D", "11D", "11H"],  # returns `two_pair`
+    #     ["01H", "02H", "03H", "04H", "05C"],  # returns `straight`
+    #     ["10S", "jH ", "qD ", "kD ", "aH "],  # returns `straight`
+    #     ["1h ", "1h ", "1h ", "1h ", "1cw"],  # returns `flush_five`
+    # ]
+    # for hand in all_hands:
+    #     print(
+    #         f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(hand)}")
+    pass
