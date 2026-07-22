@@ -1,4 +1,5 @@
 from cards import fromStr
+from calculator import determine_highest_hand_ranking, repHands
 
 #consider storing this as separate JSON(s)
 cases = {
@@ -19,6 +20,9 @@ cases = {
         "13s_pl": ("k", "spades", "base", "purple", "lucky"),
         "kings puluck": ("k", "spades", "base", "purple", "lucky"),
         "KSPAD-pl": ("k", "spades", "base", "purple", "lucky"),
+    },
+    "determine_highest_hand_ranking" : {
+        "12H,13D,12D,12H":repHands[3]
     }
 }
 
@@ -47,7 +51,19 @@ class test_fromStr:
                 assert card.enhancement == "base"
         return True
 
-tests = [test_fromStr()]
+class test_determine_highest_hand_ranking:
+    name = "determine_highest_hand_ranking"
+    def __init__(self, testCases: dict[str, str] = cases[name]) -> None:
+        self.testCases = testCases
+
+    def validate(self):
+        for k, v in self.testCases.items():
+            playedHand = k.split(",")
+            result = determine_highest_hand_ranking(playedHand)
+            assert result == v
+        return True
+
+tests = [test_fromStr(), test_determine_highest_hand_ranking()]
 verbose = True
 
 for t in tests:
