@@ -1,5 +1,5 @@
 from typing import Sequence
-from cards import PlayingCard, fromStr
+from cards import PlayingCard, fromStr, suits
 
 
 def numericRank(rank: str, aceHigh: bool = False) -> int:
@@ -33,10 +33,13 @@ def determine_highest_hand_ranking(hand: Sequence[PlayingCard | str]) -> str:
 
     for _ in range(ranks.count(1)):
         ranks.append(numericRank("a", True))
-    suits = [card.suit for card in played]
-
+    played_suits = [card.suit if card.enhancement !=
+                    "wild" else "wild" for card in played]
+    if (n := played_suits.count("wild")) > 0:
+        played_suits += suits * n
     rank_counts = {rank: ranks.count(rank) for rank in set(ranks)}
-    suit_counts = {suit: suits.count(suit) for suit in set(suits)}
+    suit_counts = {suit: played_suits.count(
+        suit) for suit in set(played_suits)}
 
     highest_rank_count = max(rank_counts.values())
     highest_suit_count = max(suit_counts.values())
@@ -93,8 +96,8 @@ if __name__ == "__main__":
         ["14H", "14D", "11D", "11H"],  # returns `two_pair`
         ["01H", "02H", "03H", "04H", "05C"],  # returns `straight`
         ["10S", "jH ", "qD ", "kD ", "aH "],  # returns `straight`
+        ["1h ", "1h ", "1h ", "1h ", "1cw"],  # returns `flush_five`
     ]
-
     for hand in all_hands:
         print(
             f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(hand)}")
