@@ -8,6 +8,7 @@ class pokerHands:
     straights = ("straight_flush", "straight")
     flushFive = "flush_five"
     twoPair = "two_pair"
+    flush = "flush"
 
 def numericRank(rank: str, aceHigh: bool = False) -> int:
     faceOrder = ("j", "q", "k")
