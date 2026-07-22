@@ -29,6 +29,8 @@ def determine_highest_hand_ranking(hand: Sequence[PlayingCard | str]) -> str:
     played = [fromStr(str(card)) for card in hand]
 
     ranks = [numericRank(card.rank, False) for card in played]
+    ranks.sort()  # might as well, makes logic a bit easier later
+
     for _ in range(ranks.count(1)):
         ranks.append(numericRank("a", True))
     suits = [card.suit for card in played]
@@ -40,10 +42,13 @@ def determine_highest_hand_ranking(hand: Sequence[PlayingCard | str]) -> str:
     highest_suit_count = max(suit_counts.values())
 
     num_pairs = [v for k, v in rank_counts.items() if k != 14].count(2)
-
-    isStraight = max(ranks) - min(ranks) == len(ranks) - \
-        1 and len(set(ranks)) == len(ranks)
-    #doesn't seem to detect ace-low straights
+    if highest_rank_count == 1:
+        if len(ranks) > 5:  # there's 1 ace
+            # first clause is ace-low, second clause is ace-high
+            isStraight = max(
+                ranks) - min(ranks[1:]) == 4 or max(ranks[:-1]) - min(ranks) == 4
+        else:
+            isStraight = max(ranks) - min(ranks) == 4
 
     nOfRank = ("", "high_card", "pair", "three_of_a_kind",
                "four_of_a_kind", "five_of_a_kind")[highest_rank_count]
@@ -86,6 +91,8 @@ if __name__ == "__main__":
         ["09H", "09H", "09C", "12D", "12D"],
         ["14H", "14D", "13D", "11H"],  # returns `pair`
         ["14H", "14D", "11D", "11H"],  # returns `two_pair`
+        ["01H", "02H", "03H", "04H", "05C"],  # returns `straight`
+        ["10S", "jH ", "qD ", "kD ", "aH "],  # returns `straight`
     ]
 
     for hand in all_hands:
