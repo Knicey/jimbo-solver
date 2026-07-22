@@ -5,7 +5,7 @@ from cards import PlayingCard, fromStr, suits
 class pokerHands:
     repHands = ("", "high_card", "pair", "three_of_a_kind", "four_of_a_kind", "five_of_a_kind")
     fullHouses = ("full_house", "flush_house") #indexing via bool `isFlush` returns the correct hand
-    straights = ("straight_flush", "straight")
+    straights = ("straight", "straight_flush")
     flushFive = "flush_five"
     twoPair = "two_pair"
     flush = "flush"
