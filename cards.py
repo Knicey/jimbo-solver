@@ -109,7 +109,7 @@ def fromStr(cardStr: str) -> PlayingCard:
     Does NOT support Hiker upgrades, sorry/not sorry
     """
     rank = ""
-    cardStr = cardStr.lower().strip()
+    cardStr = cardStr.lower().strip().replace(" of ", "")
     fullRanks = ("jack", "queen", "king", "ace")
     akt = 0 #index of cardStr currently being analyzed
     ignoredChars = " _-"
@@ -139,6 +139,9 @@ def fromStr(cardStr: str) -> PlayingCard:
             akt += 1
         else:
             raise Exception(f"Rank equals 0: `{cardStr}`")
+    elif cardStr[akt] in "23456789":
+        rank = cardStr[akt]
+        akt += 1
     elif (r := "jqka".find(cardStr[akt])) != -1: #cheeky walrus operator
         for char in fullRanks[r]:
             if char == cardStr[akt] and akt < (len(cardStr) - 1): akt += 1 #continue along the substring

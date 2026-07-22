@@ -1,6 +1,26 @@
+from typing import Sequence
+from cards import PlayingCard, fromStr, suits
+
+#names of hands that consist of n repeated ranks
+class pokerHands:
+    repHands = ("", "high_card", "pair", "three_of_a_kind", "four_of_a_kind", "five_of_a_kind")
+    fullHouses = ("full_house", "flush_house") #indexing via bool `isFlush` returns the correct hand
+    straights = ("straight", "straight_flush")
+    flushFive = "flush_five"
+    twoPair = "two_pair"
+    flush = "flush"
+
+def numericRank(rank: str, aceHigh: bool = False) -> int:
+    faceOrder = ("j", "q", "k")
+    if rank == "a":
+        return 14 if aceHigh else 1
+    elif rank in faceOrder:
+        return faceOrder.index(rank) + 11
+    else:
+        return int(rank)
 
 
-def determine_highest_hand_ranking(hand):
+def determine_highest_hand_ranking(hand: Sequence[PlayingCard | str]) -> str:
     """
     Calculate what the highest ranked hand available is.
 
@@ -12,128 +32,59 @@ def determine_highest_hand_ranking(hand):
     """
 
     if not hand:
-        return 0
+        return ""
 
-    ranks = [int(card[:2]) for card in hand]
-    suits = [card[2] for card in hand]
+    played = [fromStr(str(card)) for card in hand]
 
+    ranks = [numericRank(card.rank, False) for card in played]
+    ranks.sort()  # might as well, makes logic a bit easier later
+
+    for _ in range(ranks.count(1)):
+        ranks.append(numericRank("a", True))
+    played_suits = [card.suit if card.enhancement !=
+                    "wild" else "wild" for card in played]
+    if (n := played_suits.count("wild")) > 0:
+        played_suits += suits * n
     rank_counts = {rank: ranks.count(rank) for rank in set(ranks)}
-    suit_counts = {suit: suits.count(suit) for suit in set(suits)}
+    suit_counts = {suit: played_suits.count(
+        suit) for suit in set(played_suits)}
 
     highest_rank_count = max(rank_counts.values())
     highest_suit_count = max(suit_counts.values())
 
-    num_pairs = list(rank_counts.values()).count(2)
+    num_pairs = [v for k, v in rank_counts.items() if k != 14].count(2)
+    if highest_rank_count == 1:
+        if len(ranks) > 5:  # there's 1 ace
+            # first clause is ace-low, second clause is ace-high
+            isStraight = max(
+                ranks) - min(ranks[1:]) == 4 or max(ranks[:-1]) - min(ranks) == 4
+        else:
+            isStraight = max(ranks) - min(ranks) == 4
 
-    isStraight = max(ranks) - min(ranks) == len(ranks) - 1 and len(set(ranks)) == len(ranks)
+    nOfRank = pokerHands.repHands[highest_rank_count]
+    isFlush = highest_suit_count == 5
 
-    
-    match len(hand):
-        case 0:
-            ### If no cards are played, no score is given
-            return 0
-        case 1:
-            ### If there is only one card in the hand, it can only score as "High Card"
-            return "high_card"
-
-        case 2:
-            ### If the are only two cards played, it can either be a pair or still high card
-            if highest_rank_count == 2:
-                return "pair"
-            
-            else:
-                return "high_card"
-
-
-        case 3:
-            ### If there are three cards played, it can either be a three of a kind or any of the previous options
-            if highest_rank_count == 3:
-                return "three_of_a_kind"
-            
-            elif highest_rank_count == 2:
-                return "pair"
-            
-            else:
-                return "high_card"
-            
-        case 4:
-            ### If there are four cards played, it can either be a four of a kind, two pair or any of the previous options
-            if highest_rank_count == 4:
-                return "four_of_a_kind"
-            
-            ### If there are two ranks that have a count of 2, then it is a two pair
-            elif num_pairs == 2:
-                return "two_pair"
-            
-            elif highest_rank_count == 3:
-                return "three_of_a_kind"
-            
-            elif highest_rank_count == 2:
-                return "pair"
-            
-            else:
-                return "high_card"
-            
-        case 5:
-            ### If there are five cards played, it can be anything
-
-            ### Balatro has 3 hands that are possible to achieve in traditional poker
-
-            # Flush Five: All 5 cards have matching ranks and suits
-            if highest_suit_count == 5 and highest_rank_count == 5:
-                return "flush_five"
-            
-            # Flush House: All 5 cards have matching suits, but a full house for the ranks
-            elif highest_suit_count == 5 and highest_rank_count == 3 and num_pairs == 1:
-                return "flush_house"
-            
-            # Five of a Kind: All 5 cards have matching ranks
-            elif highest_rank_count == 5:
-                return "five_of_a_kind"
-            
-            ### These are the rest of the traditional possible poker hands
-
-            elif highest_suit_count == 5 and isStraight:
-                return "straight_flush"
-
-            elif highest_suit_count == 5:
-                return "flush"
-            
-            elif isStraight:
-                return "straight"
-            
-            elif highest_rank_count == 3 and num_pairs == 1:
-                return "full_house"
-            
-            
-            elif highest_rank_count == 4:
-                return "four_of_a_kind"
-            
-            elif highest_rank_count == 3:
-                return "three_of_a_kind"
-            
-            elif num_pairs == 2:
-                return "two_pair"
-            
-            elif highest_rank_count == 2:
-                return "pair"
-            
-            else:
-                return "high_card"
-    
-    return 0
-
-if __name__ == "__main__":
-    # Example usage
-    hand1 = ["12H", '13D', '12D', '12H']
-    hand2 = ['12H', '12H', '12H', '12H', '12H']
-    hand3 = ['12H', '12H', '12H', '13H', '13H']
-    hand4 = ['12H', '12H', '13H', '13H', '14H']
-    hand5 = ['09H', '10H', '11H', '12H', '13H']
-    hand6 = ['09H', '10H', '11H', '12H', '13C']
-    hand6 = ['09H', '09H', '09C', '12D', '12D']
-
-    all_hands = [hand1, hand2, hand3, hand4, hand5, hand6]
-
-    for hand in all_hands:
-        print(f"The highest ranking hand within {hand} is a: {determine_highest_hand_ranking(hand)}")
+    if len(played) <= 4:
+        # since num_pairs is the number of distinct pairs, a 3- and 4-of-a-kinds require num_pairs=1
+        # thus, if a two-pair is playable, 3- and 4-of-a-kind's are not playable, so it's the best hand
+        return "two_pair" if num_pairs == 2 else nOfRank
+    else:
+        match highest_rank_count:
+            case 5:
+                return "flush_five" if isFlush else nOfRank
+            case 3:
+                # assert num_pairs != 2 #i think this is true
+                if num_pairs == 1:
+                    return "flush_house" if isFlush else "full_house"
+                else:  # num_pairs == 0, so no two-pair
+                    return nOfRank
+            case 1:
+                if isFlush:
+                    return "straight_flush" if isStraight else "flush"
+                else:
+                    return "straight" if isStraight else nOfRank
+            case 2:
+                if isFlush: return "flush"
+                return "two_pair" if num_pairs == 2 else nOfRank
+            case _:
+                return nOfRank
